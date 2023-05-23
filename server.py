@@ -40,8 +40,8 @@ class server(protocol):
         sock.settimeout(5)
         #print(sock.timeout)
         # Receive/respond loop
-        print('\nwaiting to receive message de multicast')
-        while not self.multicast_closed:
+        print('\nwaiting to receive multicast message')
+        while not self.multicast_closed: 
             try:
                 data, address = sock.recvfrom(1024)
             except socket.timeout:
