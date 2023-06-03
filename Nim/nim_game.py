@@ -1,10 +1,12 @@
-from player import player
+from Nim.player import player
 
 class nim_game:
 
-    def __init__(self, players : list[player], sticks_number : int) -> None:
+    def __init__(self, players : list[player], sticks_number : int, current_player : player = None) -> None:
         self._players = players
         self._sticks_number = sticks_number
+        self._current_player = current_player
+        self._current_play = []
     
     def excecute_game(self):
         self.initialize()
@@ -28,8 +30,10 @@ class nim_game:
             
             if(self._end):
                 self.winner = self._players[self._current_player_index].name
+                self._current_play.append([self._players, self._current_player_index, move, self._sticks_list.count(1), self.winner])
                 return
             else:
+                self._current_play.append([self._players, self._current_player_index, move, self._sticks_list.count(1), ''])
                 self._current_player_index += 1
             
     def _put_sticks(self):        
@@ -48,9 +52,7 @@ class nim_game:
     def initialize(self):
         self.winner = ''
     
-        self._current_player_index = 0
+        self._current_player_index = self._players.index(self._current_player) if self._current_player != None else 0
         self._sticks_list = []
         self._start = True
-        self._end = False
-        
-        
+        self._end = False    

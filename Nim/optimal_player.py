@@ -1,4 +1,4 @@
-from player import player
+from Nim.player import player
 import random as rd
 
 class optimal_player(player):

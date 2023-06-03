@@ -1,31 +1,48 @@
-from abc import ABC
-
-class protocol(ABC):
-    def __init__(self):
-        self.sms = None
+class sd: #server down
+    def __init__(self) -> None:
         self.active = False
-        self.count = 0
+        self.server_down = []
+        self.sender = None
+        self.sender_id = None
+        self.already_sent = False
+    
+    def default(self):
+        self.__init__()
 
-class CR(protocol): #close ring
-    def __init__(self):
-        self.sms = None
+class sg: #start game
+    def __init__(self) -> None:
         self.active = False
-        self.count = 0
+        self.games = None
+        self.ip = None
+        self.continue_game = False
+        
 
-class EM(protocol): #election message
-    def __init__(self):
-        self.sms = None
+class dg: # distribute games
+    def __init__(self) -> None:
         self.active = False
-        self.count = 0
+        self.games = None
+        self.already_sent = False
 
-class BS(protocol): #boss
-    def __init__(self):
-        self.sms = None
+class gr: #game replica
+    def __init__(self) -> None:
         self.active = False
-        self.count = 0
+        self.update = []
+        self.already_sent = False
 
-class CR2(protocol): #boss
-    def __init__(self):
-        self.sms = None
-        self.active = False
-        self.count = 0
+class rep:
+    def __init__(self) -> None:
+        self.replica = None
+    
+# class clt: #send message game to client
+#     def __init__(self) -> None:
+#         self.ip = None
+#         self.active_ms = False
+#         self.msg = None
+
+# class su: #send update
+#     def __init__(self) -> None:
+#         self.active = False
+#         self.update = None
+#         self.sender_ip = None
+#         self.sender_id = None
+#         self.already_sent = False
