@@ -8,5 +8,5 @@ class human_player(player):
         print(sticks_list)
         move = 0
         while(move < 1 or move > 3):
-            move = int(input('Cuantos palillos desea escoger: '))
+            move = int(input('Cuantos palillos desea escoger (1..3): '))
         return move

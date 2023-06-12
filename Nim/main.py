@@ -5,7 +5,7 @@ from human_player import human_player
 
 def main():
 
-    nim = nim_game([random_player('pepe'), human_player('kevin')], 8)
+    nim = nim_game([human_player('kevin'),optimal_player('pepe')], 8)
     for i in range(100):
         nim.excecute_game()
         print(nim.winner)
