@@ -1,5 +1,5 @@
-from Games.player import player
-from Games.play import optimal
+from Nim.player import player
+from Nim.play import optimal
 import random as rd
 
 class optimal_player(player):

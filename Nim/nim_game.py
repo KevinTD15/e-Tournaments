@@ -1,5 +1,5 @@
-from Games.game import game
-from Games.player import player
+from Nim.game import game
+from Nim.player import player
 
 class nim_game(game):
     

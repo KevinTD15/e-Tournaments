@@ -1,9 +1,9 @@
 from protocol import *
-from Games.nim_game import nim_game
-from Games.tic_tac_toe import tic_tac_toe
-from Games.random_player import random_player
-from Games.optimal_player import optimal_player
-from Games.tournament import *
+from Nim.nim_game import nim_game
+from Nim.tic_tac_toe import tic_tac_toe
+from Nim.random_player import random_player
+from Nim.optimal_player import optimal_player
+from Nim.tournament import *
 import logging
 import struct
 import pickle

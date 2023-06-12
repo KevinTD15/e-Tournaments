@@ -1,5 +1,5 @@
-from Games.player import player
-from Games.play import random
+from Nim.player import player
+from Nim.play import random
 import random as rd
 
 class random_player(player):

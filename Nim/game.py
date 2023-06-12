@@ -1,5 +1,5 @@
 from abc import ABC, abstractstaticmethod
-from Games.player import player
+from Nim.player import player
 
 class game(ABC):
     def __init__(self, _players : list[player] = [], config : object = 0, current_player_init : int= 0, winner : str = ''):

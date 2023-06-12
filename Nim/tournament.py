@@ -1,7 +1,7 @@
 from abc import ABC, abstractstaticmethod
-from Games.game import game
-from Games.nim_game import nim_game
-from Games.player import player
+from Nim.game import game
+from Nim.nim_game import nim_game
+from Nim.player import player
 
 class tournament(ABC):
     def __init__(self, players : list[player], initial_state : int, game : game) -> None:

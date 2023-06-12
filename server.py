@@ -6,9 +6,10 @@ import threading
 import pickle
 import time
 from socket_thread import socket_thread
-from Games.nim_game import nim_game
-from Games.random_player import random_player
-from Games.optimal_player import optimal_player
+from Nim.nim_game import nim_game
+from Nim.tic_tac_toe import tic_tac_toe
+from Nim.random_player import random_player
+from Nim.optimal_player import optimal_player
 from protocol import *
 import sys
 import logging

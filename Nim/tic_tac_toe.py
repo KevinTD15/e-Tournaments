@@ -1,6 +1,6 @@
-from Games.game import game
-from Games.player import player
-from Games.tic_tac_toe_utils import analyzeboard
+from Nim.game import game
+from Nim.player import player
+from Nim.tic_tac_toe_utils import analyzeboard
 
 class tic_tac_toe(game):
     

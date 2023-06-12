@@ -1,5 +1,7 @@
 from abc import ABC, abstractstaticmethod
-from Games.tic_tac_toe_utils import minimax
+#from nim_game import nim_game
+#from Nim.test import tic_tac_toe
+from Nim.tic_tac_toe_utils import minimax
 import random as rd
 
 class play(ABC):
