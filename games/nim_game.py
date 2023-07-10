@@ -1,5 +1,5 @@
-from Nim.game import game
-from Nim.player import player
+from games.game import game
+from games.player import player
 
 class nim_game(game):
     
@@ -31,9 +31,9 @@ class nim_game(game):
                 self._current_play.append([self._players, self._current_player_index, move, self._sticks_list.count(1), self.winner])
                 return
             else:
-                self._current_player_index += 1
                 self._current_play.append([self._players, self._current_player_index, move, self._sticks_list.count(1), ''])
-            
+                self._current_player_index += 1
+                
     def _update_sitcks_list(self, move : int):        
         index = self._sticks_list.index(1)
         for i in range(index, index + move, 1):
@@ -50,3 +50,8 @@ class nim_game(game):
         
     def copy(self):
         return nim_game()
+    
+    def show_board(self):
+        self._sticks_list = [1 for i in range(self.config)]
+        x = self._current_player_index % 2
+        print (f'Player 1: {self._players[0].name}, Player 2: {self._players[1].name} Current: {self._players[x].name} Play: {self._sticks_list}')

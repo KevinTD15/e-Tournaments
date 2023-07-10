@@ -1,5 +1,5 @@
 from abc import ABC, abstractstaticmethod
-from Nim.play import *
+from games.play import *
 
 class player(ABC):
     

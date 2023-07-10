@@ -10,7 +10,10 @@ class sd: #server down
     
     def default(self):
         self.__init__()
-        
+
+class sgc: #start game continue
+    def __init__(self) -> None:
+        self.active = False        
 
 class sg: #start game
     def __init__(self) -> None:
@@ -24,6 +27,7 @@ class dg: # distribute games
     def __init__(self) -> None:
         self.active = False
         self.games = None
+        self.active_games = 0
         self.already_sent = False
         self.client_ip = None
 
@@ -39,16 +43,6 @@ class gr: #game replica
 #         self.winner = None
 #         self.tournamens = None
 #        self.play_count = None
-        
-
-class rep: #replica
-    def __init__(self) -> None:
-        self.play = None
-        self.winner = None
-        self.tournamens = None
-        self.send_leader_rep = []
-        self.play_count = None
-        self.already_sent = False
 
 class stl: #send to leader
     def __init__(self) -> None:
@@ -57,8 +51,36 @@ class stl: #send to leader
         self.already_sent = False
         self.send = None
         self.pause = False
+        self.tnmt_per_client = {}   
+    
+    def default(self):
+        self.repl = None
+        self.play = None
+        self.tnmt_per_client = {}
         
+class rep: #replica
+    def __init__(self) -> None:
+        self.repl = None 
+        self.tnmt_per_client = {}  
+            
+class cd: #client down
+    def __init__(self) -> None:
+        self.resume = False
+        self.state = False
+        self.response = False
+        self.ip = None
+
         
+class pr: #confirm client package received
+    def __init__(self) -> None:
+        self.id = 0
+        
+class ps: #package sent to client
+    def __init__(self) -> None:
+        self.id = 0
+        self.list = []
+        
+
 # class clt: #send message game to client
 #     def __init__(self) -> None:
 #         self.ip = None

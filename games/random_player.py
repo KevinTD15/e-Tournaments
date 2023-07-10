@@ -1,6 +1,5 @@
-from Nim.player import player
-from Nim.play import random
-import random as rd
+from games.player import player
+from games.play import random
 
 class random_player(player):
     def __init__(self, name, game) -> None:

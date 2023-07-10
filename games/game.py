@@ -1,5 +1,5 @@
 from abc import ABC, abstractstaticmethod
-from Nim.player import player
+from games.player import player
 
 class game(ABC):
     def __init__(self, _players : list[player] = [], config : object = 0, current_player_init : int= 0, winner : str = ''):
@@ -20,4 +20,8 @@ class game(ABC):
     
     @abstractstaticmethod
     def copy():
+        pass
+    
+    @abstractstaticmethod
+    def show_board():
         pass
