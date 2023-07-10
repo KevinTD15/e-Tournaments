@@ -103,7 +103,7 @@ class server:
     
     def receive_multicast(self):
         try:
-            multicast_group = '224.3.29.76'
+            multicast_group = '224.3.29.80'
             server_address = ('', 10000)
             # Create the socket
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -126,7 +126,7 @@ class server:
                     if self.leader == None or (self.id == list(self.succesor_table.keys())[-1] and self.id != self.leader_id):                   
                         if len(self.succesor_table)==1: 
                             self.leader = self.ip
-                            self.leader_id = self.leader_id
+                            self.leader_id = self.id
                             self.predecesor = []
                             self.succesor = []
                             logging.warning('en receive_multicast. solo quedo en succesor_table 1 servidor')
@@ -160,6 +160,7 @@ class server:
                         if(type(data) == int): #servidor solicitando entrar
                             data = self.receive_server(data, address, sock)
                         else: #cliente solicitando entrar
+                            print(f'game pause={self.game_pause}')
                             if (self.ip == self.leader and not self.game_pause):
                                 self.sg.ip = data
                                 if(data in self.tnmt_per_client and not self.tnmt_per_client[data].finished):
@@ -319,7 +320,7 @@ class server:
 
     def send_multicast(self):
         message = pickle.dumps(self.id)
-        multicast_group = ('224.3.29.76', 10000)
+        multicast_group = ('224.3.29.80', 10000)
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(0.9)
         ttl = struct.pack('b', 1)
@@ -898,6 +899,7 @@ class server:
 
                             else:
                                 while self.ps[ip].id>0 and self.ps[ip].id not in self.pr[ip] and not self.tnmt_per_client[ip].client_down:
+                                    #logging.warning(f'en send client ps')
                                     pass
                                 self.tnmt_per_client[ip].play_count =lon
                                 if self.tnmt_per_client[ip].state_winners_sent==0:
