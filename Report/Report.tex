@@ -30,7 +30,7 @@
     Un sistema distribuido es un conjunto de equipos independientes que act\'uan de forma transparente formando un \'unico equipo. Su objetivo es descentralizar tanto el almacenamiento de la informaci\'on como el procesamiento. Este proyecto, de manera general, implementa una arquitectura DHT Chord con algunas modificaciones, un algoritmo de replicaci\'on de informaci\'on, y otro de balanceo de carga para la correcta y eficiente ejecuci\'on de diferentes tipos de torneos creados por m\'ultiples clientes.
     
     \section{Torneos}
-    Fueron implementados dos tipos de torneos: clasificación y !!!!!!!!(Rellena con el segundo tipo de torneo)!!!!!!!!!, pero esta implementación es extensible a la incorporación de nuevos tipos de torneos sin modificar el funcionamiento del sistema. Para crear un nuevo tipo de torneo basta con seguir los siguientes pasos:\\
+    Fue implementado un tipo de torneo clasificatorio, pero esta implementación es extensible a la incorporación de nuevos tipos de torneos sin modificar el funcionamiento del sistema. Para crear un nuevo tipo de torneo basta con seguir los siguientes pasos:\\
     \begin{enumerate}
     	\item En $tournament.py$ crear una nueva clase con el torneo que se desee implementar y heredar de la clase abstracta tournament e implementar el método $create\_matching()$.\\
     	\item En $client.py$ añadir la opción de crear el nuevo torneo añadido.\\
@@ -55,7 +55,7 @@
     \subsection{Elecci\'on de =l coordinador}
     A diferencia de la implementación clásica de Chord, en este proyecto el nodo coordinador siempre será el nodo con mayor ID en la red, por tanto, como cada nodo tiene una lista de sucesores que contiene a todos los nodos, estos siempre estarán de acuerdo. Más adelante serán explicadas ventajas y desventajas.\\
     
-    \subsection{Finger Table} !!!!!!!!!!!!Explica bien las entradas de la tabla, que ni yo las entiendo jajaj!!!!!!!!!!!!!!\\
+    \subsection{Finger Table} 
     Un nodo Chord sólo necesita almacenar información sobre unos pocos nodos de la red para localizar la clave que busca. Esta información se almacena en una tabla llamada finger table. Esta tiene m entradas, donde m es la longitud de bits de los identificadores del anillo. Cada entrada $2^i$ , donde 0$\leq$i$\leq$m-1, de la tabla finger de un nodo con identificador n está formada por el identificador del nodo sucesor de (n+$2^i$) y su dirección IP.\\
     
     \subsection{Inserci\'on de un nodo en la red}
@@ -96,16 +96,6 @@
     \section{R\'eplica}
     \subsection{En juegos}
     Cada nodo n de la red guarda una réplica del estado de los juegos que se está ejecutando en cada uno de los nodos que pertenece a su finger table. De esta forma, si n cae el primer nodo al que le llegue el mensaje avisando sobre esto, si guardaba una réplica suya, este continúa la ejecución de cada uno de los juegos por donde los había dejado n.\\
-    
-    \subsection{En torneos}
-    !!!!!!!
-    Rellenar
-    !!!!!!!\\
-    
-    \subsection{Balanceo de cargas}
-    !!!!!!!
-    Completar
-    !!!!!!!!\\
     
     \section{An\'alisis de las caracter\'isticas de la implementaci\'on}
     
@@ -150,10 +140,4 @@
     
     
     
-
-
-\begin{thebibliography}{99}
-    %-----------------------------------------------------------------------------------
-        %-----------------------------------------------------------------------------------
-    \end{thebibliography}
 \end{document}
