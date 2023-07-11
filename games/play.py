@@ -50,5 +50,8 @@ class random(play):
             for i in range(len(self.state)):
                 if(self.state[i] == 0):
                     empty_cells.append(i)
-            x = rd.sample(empty_cells, k=1)
+            if(len(empty_cells)):
+                x = rd.sample(empty_cells, k=1)
+            else:
+                x = [10]
             return x[0]

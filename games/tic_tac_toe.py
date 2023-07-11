@@ -13,21 +13,22 @@ class tic_tac_toe(game):
             self._excecute_turn()
     
     def initialize(self):
-        self.board = [0,0,0,0,0,0,0,0,0] if self.config == 0 else self.config
+        self.board = [0,0,0,0,0,0,0,0,0] if type(self.config)!=list else self.config[0]
         self._start = True
         self._players[0].hand = 1
         self._players[1].hand = -1
         self._table = False
-        self.turn_count = 0
+        self.turn_count = self.config[1] if type(self.config)==list else 0
     
     def _excecute_turn(self):
         if(self.turn_count == 9 and analyzeboard(self.board) == 0):
-            print('Tabla')
+            x = 0 if self._current_player_index % 2 == 1 else 1
+            self._current_play.append([self._players, x, 2, self.board, 'Tie'])
             self.initialize()
             
         if(self._start):
             self._start = False
-            self.board = [0,0,0,0,0,0,0,0,0] if self.config == 0 else self.config 
+            self.board = [0,0,0,0,0,0,0,0,0] if type(self.config)!=list else self.config[0]
         else:
             if(self._current_player_index >= len(self._players)):
                 self._current_player_index= 0
@@ -35,27 +36,31 @@ class tic_tac_toe(game):
             
             move = current_player._select_move(self.board)
             
-            self.board[move] = current_player.hand
-            
-            #self.board_state()
-            
-            result = analyzeboard(self.board)
-            
-            if(result == current_player.hand):
-                self._end = True
-            
-            if(self._end):
-                self.winner = self._players[self._current_player_index].name
-                self._current_play.append([self._players, self._current_player_index, move, self.board, self.winner])
-                return    
-            else:
-                self._current_play.append([self._players, self._current_player_index, move, self.board, ''])
-                self._current_player_index += 1
-                
-            self.turn_count += 1
+            if(move == 10):
+                self._current_play.append([self._players, self._current_player_index, 2, self.board, 'Tie'])
+                self.initialize()
+            else:                
+                self.board[move] = current_player.hand
+
+                #self.board_state()
+
+                result = analyzeboard(self.board)
+
+                if(result == current_player.hand):
+                    self._end = True
+
+                if(self._end):
+                    self.winner = self._players[self._current_player_index].name
+                    self._current_play.append([self._players, self._current_player_index, move, [self.board, self.turn_count], self.winner])
+                    return    
+                else:
+                    self._current_play.append([self._players, self._current_player_index, move, [self.board, self.turn_count + 1], ''])
+                    self._current_player_index += 1
+
+                self.turn_count += 1
             
     def show_board(self):
-        self.board = self.config
+        self.board = self.config[0]
         x = self._current_player_index % 2
         print(f"Player 1: {self._players[0].name}, Player 2: {self._players[1].name}, Current: {self._players[x].name}, Play: \n\n");
         for i in range (0,9):

@@ -37,13 +37,6 @@ class gr: #game replica
         self.update = []
         self.already_sent = False
 
-# class frep: #full replica
-#     def __init__(self) -> None:
-#         self.play = None
-#         self.winner = None
-#         self.tournamens = None
-#        self.play_count = None
-
 class stl: #send to leader
     def __init__(self) -> None:
         self.play = None
@@ -57,11 +50,6 @@ class stl: #send to leader
         self.repl = None
         self.play = None
         self.tnmt_per_client = {}
-        
-class rep: #replica
-    def __init__(self) -> None:
-        self.repl = None 
-        self.tnmt_per_client = {}  
             
 class cd: #client down
     def __init__(self) -> None:
@@ -79,18 +67,3 @@ class ps: #package sent to client
     def __init__(self) -> None:
         self.id = 0
         self.list = []
-        
-
-# class clt: #send message game to client
-#     def __init__(self) -> None:
-#         self.ip = None
-#         self.active_ms = False
-#         self.msg = None
-
-# class su: #send update
-#     def __init__(self) -> None:
-#         self.active = False
-#         self.update = None
-#         self.sender_ip = None
-#         self.sender_id = None
-#         self.already_sent = False

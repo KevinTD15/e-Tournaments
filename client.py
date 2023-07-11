@@ -71,7 +71,7 @@ def main():
 def sendrecv_multicast():
     try:
         message = pickle.dumps(socket.gethostbyname(socket.gethostname()))
-        multicast_group = ('224.3.29.76', 10000)
+        multicast_group = ('224.3.29.80', 10000)
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(0.9)
         # Set the time-to-live for messages to 1 so they do not
@@ -85,8 +85,8 @@ def sendrecv_multicast():
                     data, server = sock.recvfrom(1024)
                     #print(f'recibi de ip {server[0]}')
                 except socket.timeout:
-                    #print('Server timed out, no responses')
-                    sock.settimeout(5)
+                    print('Server timed out, no responses')
+                    sock.settimeout(10)
                     break
                 except socket.error as e:
                     print('Error al recv de multicast ' + str(e.errno))
