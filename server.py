@@ -159,7 +159,6 @@ class server:
                         if(type(data) == int): #servidor solicitando entrar
                             data = self.receive_server(data, address, sock)
                         else: #cliente solicitando entrar
-                            print(f'game pause={self.game_pause}')
                             if (self.ip == self.leader and not self.game_pause):
                                 self.sg.ip = data
                                 if(data in self.tnmt_per_client):
@@ -444,7 +443,7 @@ class server:
         play_count = self.chkp_repl
         send_leader_count = self.chkp_play   #si send_server orig se inicializa con 0, si no a partir del ultimo chkp
         b=len(self.send_leader)
-        logging.warning(f'QQQQQQ Al entrar en ip={ip} send server play_count = {play_count} send_leader_count={send_leader_count} self.send_leader_count={self.send_leader_count} len sen{b}')
+        logging.warning(f'QQQQQQ Al entrar en send server play_count = {play_count} send_leader_count={send_leader_count} self.send_leader_count={self.send_leader_count} len sen{b}')
         times = 0
         lon = 0
         len_send_leader = 0
@@ -681,7 +680,7 @@ class server:
                                         if(i[1] in self.connections_in):
                                             self.sd.rep_leader = [self.tnmt_per_client_replica] #CORRECTO
                                             logging.warning(f'en recv sd i[1] in self.connections_in salve torneo {self.tnmt_per_client_replica}')
-                                            # for i in self.tnmt_per_client: #TODO poner for
+                                            # for i in self.tnmt_per_client: 
                                             #     for k in self.tnmt_per_client[i].round.games:
                                             #         logging.warning(f'replica leader j1 : {k[0]._players[0].name}, j2: {k[0]._players[1].name} jug:{k[1:]}')
                                             #     for j in self.tnmt_per_client[i].round.winners:
@@ -756,6 +755,7 @@ class server:
                             self.dg_rlock.release()
                             a = len(sms.games)
                             logging.warning(f'ssssssssRecibi mensaje DG de {sms.client_ip} en ip {ip} y sms.active ={sms.active } len sms.games={a}')
+
 
                         elif(type(sms) == stl):
                             if ip == self.leader:                                    
@@ -875,7 +875,6 @@ class server:
                             else:
                                 while self.ps[ip].id>0 and self.ps[ip].id not in self.pr[ip] and not self.tnmt_per_client[ip].client_down:
                                     #logging.warning(f'en send client ps')
-<<<<<<< HEAD
                                     pass                                                                
                                 for i in self.ps[ip].list:
                                     if type(i) == str:
@@ -900,13 +899,6 @@ class server:
                                         logging.warning(f'voy a unfinished_game ip={ip} self.send_leader_count = {self.send_leader_count} len send lead={len(self.send_leader)}')
                                         self.unfinished_game(ip)
                                         self.tnmt_per_client[ip].round.time = 0
-=======
-                                    pass
-                                self.tnmt_per_client[ip].play_count =lon
-                                if self.tnmt_per_client[ip].state_winners_sent==0:
-                                    self.tnmt_per_client[ip].state_winners_sent=1                   
-
->>>>>>> d7fc14eb2a172523f5082d1cf063ce917dbcf6a5
                     except socket.error as e:  
                         self.tnmt_per_client[ip].client_down = True
                 else:
@@ -1296,8 +1288,7 @@ class server:
                     logging.warning(f'juegos incompletos ver replica j1:{i[0]._players[0].name} j2:{i[0]._players[1].name}')  
                     if ip in self.game_replicas:
                         reps = list(self.game_replicas[ip])
-                        logging.warning(f'juegos incompletos ver si esta en replica j1:{i[0]._players[0].name} j2:{i[0]._players[1].name}')  
-                        x = len(reps) - 10 if len(reps) > 10 else -1
+                        #logging.warning(f'juegos incompletos ver si esta en replica j1:{i[0]._players[0].name} j2:{i[0]._players[1].name}')  
                         for k in range(len(reps)-1, -1, -1):    #buscar en las replicas ultima jugada
                             if(i[0]._players[0].name == reps[k][0][0].name and i[0]._players[1].name == reps[k][0][1].name and ip == reps[k][0][1]):
                                 logging.warning(f'juegos incompletos encontre replica j1:{i[0]._players[0].name} j2:{i[0]._players[1].name} jugada:{reps[k]}')
@@ -1325,7 +1316,7 @@ class server:
 
 def main():
     logging.basicConfig(filename='server.log', filemode='w', format='%(asctime)s - %(message)s')#, filemode='w', format='%(message)s')
-    s = server(6)
+    s = server(160)
     logging.warning(f'Mi id es: {s.id}')
     thread = threading.Thread(target=s.create_server)
     thread.start()    
