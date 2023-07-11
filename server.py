@@ -159,6 +159,7 @@ class server:
                         if(type(data) == int): #servidor solicitando entrar
                             data = self.receive_server(data, address, sock)
                         else: #cliente solicitando entrar
+                            print(f'game pause={self.game_pause}')
                             if (self.ip == self.leader and not self.game_pause):
                                 self.sg.ip = data
                                 if(data in self.tnmt_per_client):
@@ -874,6 +875,7 @@ class server:
                             else:
                                 while self.ps[ip].id>0 and self.ps[ip].id not in self.pr[ip] and not self.tnmt_per_client[ip].client_down:
                                     #logging.warning(f'en send client ps')
+<<<<<<< HEAD
                                     pass                                                                
                                 for i in self.ps[ip].list:
                                     if type(i) == str:
@@ -898,6 +900,13 @@ class server:
                                         logging.warning(f'voy a unfinished_game ip={ip} self.send_leader_count = {self.send_leader_count} len send lead={len(self.send_leader)}')
                                         self.unfinished_game(ip)
                                         self.tnmt_per_client[ip].round.time = 0
+=======
+                                    pass
+                                self.tnmt_per_client[ip].play_count =lon
+                                if self.tnmt_per_client[ip].state_winners_sent==0:
+                                    self.tnmt_per_client[ip].state_winners_sent=1                   
+
+>>>>>>> d7fc14eb2a172523f5082d1cf063ce917dbcf6a5
                     except socket.error as e:  
                         self.tnmt_per_client[ip].client_down = True
                 else:

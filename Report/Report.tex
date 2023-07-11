@@ -30,9 +30,9 @@
     Un sistema distribuido es un conjunto de equipos independientes que act\'uan de forma transparente formando un \'unico equipo. Su objetivo es descentralizar tanto el almacenamiento de la informaci\'on como el procesamiento. Este proyecto, de manera general, implementa una arquitectura DHT Chord con algunas modificaciones, un algoritmo de replicaci\'on de informaci\'on, y otro de balanceo de carga para la correcta y eficiente ejecuci\'on de diferentes tipos de torneos creados por m\'ultiples clientes.
     
     \section{Torneos}
-    Fue implementado un tipo de torneo clasificatorio, pero esta implementación es extensible a la incorporación de nuevos tipos de torneos sin modificar el funcionamiento del sistema. Para crear un nuevo tipo de torneo basta con seguir los siguientes pasos:\\
+    Fueron implementados dos tipos de torneos, clasificatorio y dos a dos. Esta implementación es extensible a la incorporación de nuevos tipos de torneos sin modificar el funcionamiento del sistema. Para crear un nuevo tipo de torneo basta con seguir los siguientes pasos:\\
     \begin{enumerate}
-    	\item En $tournament.py$ crear una nueva clase con el torneo que se desee implementar y heredar de la clase abstracta tournament e implementar el método $create\_matching()$.\\
+    	\item En $tournament.py$ crear una nueva clase con el torneo que se desee implementar y heredar de la clase abstracta tournament e implementar los métodos $create\_matching()$ y $get\_winner$.\\
     	\item En $client.py$ añadir la opción de crear el nuevo torneo añadido.\\
     \end{enumerate}
     
@@ -52,8 +52,8 @@
     \subsection{Lista de sucesores y predecesores}
     Para aumentar la robustez de la Tabla Hash Distribuida, cada nodo mantiene una lista de sucesores y predecesores de tamaño k donde k$\leq$n y n es la cantidad total de nodos de la red. En este proyecto el valor tomado de k es k=n. Más adelante serán explicadas las ventajas y desventajas de tomar esta decisión.\\
     
-    \subsection{Elecci\'on de =l coordinador}
-    A diferencia de la implementación clásica de Chord, en este proyecto el nodo coordinador siempre será el nodo con mayor ID en la red, por tanto, como cada nodo tiene una lista de sucesores que contiene a todos los nodos, estos siempre estarán de acuerdo. Más adelante serán explicadas ventajas y desventajas.\\
+    \subsection{Elecci\'on de el coordinador}
+    A diferencia de la implementación clásica de Chord, en este proyecto el nodo coordinador inicialmente será el nodo con mayor ID en la red, por tanto, como cada nodo tiene una lista de sucesores que contiene a todos los nodos, estos siempre estarán de acuerdo. Si es agregado un nuevo servidor y este posee un ID mayor que el coordinador, fue decidido mantener el mismo líder. Más adelante serán explicadas ventajas y desventajas.\\
     
     \subsection{Finger Table} 
     Un nodo Chord sólo necesita almacenar información sobre unos pocos nodos de la red para localizar la clave que busca. Esta información se almacena en una tabla llamada finger table. Esta tiene m entradas, donde m es la longitud de bits de los identificadores del anillo. Cada entrada $2^i$ , donde 0$\leq$i$\leq$m-1, de la tabla finger de un nodo con identificador n está formada por el identificador del nodo sucesor de (n+$2^i$) y su dirección IP.\\
@@ -78,12 +78,7 @@
     	\item No existe ningún nodo en la lista de sucesores que pueda aceptar conexión, por lo que el nodo se queda solo en la red.
     	\item Existe al menos un nodo al cual puede conectarse. Luego de hacerlo, le informa sobre todos los nodos que se detectaron caídos para que actualice la lista de sucesores y finger table. Finalmente, este \'ultimo propaga el mensaje a los demás servidores, de forma tal que todos los nodos en la red actualicen el cambio y se pueda mantener la estabilidad de la red.\\
     \end{enumerate}
-    
-    \subsection{Estabilizaci\'on}
-    Por la forma de implementar los algoritmos de inserción y eliminación, no es completamente necesario un algoritmo de estabilización como el que realiza Chord. Aun así, es un método extra para mantener la consistencia de la red en caso de fallas excepcionales.
-    Este se encuentra implementado de la siguiente manera:
-    Usando el algoritmo de Multicast, anteriormente descrito, todos los servidores luego de un tiempo cierran su multicast durante un breve momento (no podrán recibir nuevas conexiones). Aunque no perciban ningún problema, revisar\'an el correcto estado de su lista de sucesores,  finger table y luego vuelven a abrir la funci\'on multicast para seguir recibiendo nuevas conexiones, en caso de que ocurran.\\
-    
+   
     \subsection{Algoritmo de búsqueda}
     Un nodo n busca la información de un ID k. Inicialmente comprueba si el ID que busca está entre su identificador y su predecesor. Si k está entre su identificador y su predecesor, entonces, el nodo n es el responsable de k. Consultar\'a su tabla de claves y se finaliza la búsqueda. Si k no está entre su identificador y su predecesor, entonces, el nodo n pasa a buscar el nodo responsable de k en su finger table siguiendo los pasos siguientes: 
     \begin{enumerate}
@@ -93,9 +88,33 @@
     Repitiendo este proceso, los nodos van descubriendo otros nodos cuyos ID están cada vez más cerca de k.\\
     En este proyecto este algoritmo de búsqueda es utilizado para enviarle eficientemente al nodo coordinador las notificaciones de cada jugada hechas por cada servidor para que luego este se las muestre al cliente. \\
     
+    \section{Balanceo de carga}
+    Para aligerar la carga de los servidores de la red fue implementado un algoritmo para balancear la cantidad de partidas de juegos que ejecuta cada servidor. Para esto, el líder recibe la solicitud de un cliente, luego de crearse las partidas pertinentes, este verifica si el servidor que lo tiene a él como su sucesor tiene una cantidad mayor o igual a la suya de hilos de juegos activos. Si ese es el caso, el líder toma un juego y le da los demás a su sucesor, este realiza el mismo procedimiento y así sucesivamente hasta que todos los juegos estén repartidos de una forma pareja.
+    
     \section{R\'eplica}
     \subsection{En juegos}
     Cada nodo n de la red guarda una réplica del estado de los juegos que se está ejecutando en cada uno de los nodos que pertenece a su finger table. De esta forma, si n cae el primer nodo al que le llegue el mensaje avisando sobre esto, si guardaba una réplica suya, este continúa la ejecución de cada uno de los juegos por donde los había dejado n.\\
+    
+    \subsection{En torneos}
+    El nodo líder además de replicar las jugadas vistas anteriormente también replica constantemente en su finger table el estado de los torneos que se estén ejecutando de forma tal que si este cae, cuando termine de ejecutarse el algoritmo de eliminación de un nodo de la red, todos tengan la réplica del estado del torneo para que el nuevo servidor que pase a ser líder pueda mantener la correcta ejecución del torneo, y todos los demás servidores eliminan esta réplica para liberar espacio.
+    
+    \section{Flujo de ejecución}
+    Luego de realizar el algoritmo de balanceo de carga, cada servidor comienza a ejecutar los juegos que le corresponden, replican las jugadas en los nodos de su finger table (en caso de ser líder también el estado de los torneos) y envían al líder esas jugadas mediante el algoritmo de búsqueda explicado anteriormente. A medida que el líder va recibiendo jugadas las va enviando al cliente para su visualización.
+    
+    \section{Tolerancia a fallas}
+    Cuando cae un servidor que no es líder hay ciertos aspectos a tener en cuenta:
+    \begin{enumerate}
+    	\item Retomar la réplica de los juegos que este estaba ejecutando, lo cual se resuelve utilizando lo explicado en el apartado de Réplicas en Juegos.
+    	\item Este servidor es probable que tenga mensajes que enviar al líder que provenían de otros servidores y al caerse se pierden. La solución ideada fue, que los servidores que detecten su caída, cuando se actualicen sus respectivas finger tables y otras estructuras, vuelvan a enviar las últimas k jugadas que ya habían enviado para tratar de reparar la pérdida o en el peor caso, minimizarla.
+    	\item En caso que aún de esta manera se pierda información (específicamente de los ganadores, ya que una ronda no puede avanzar a la siguiente si no están todos). Se implementó otro algoritmo que, al cabo de cierto tiempo, si estas jugadas no le llegan al líder, este busca si en algún lugar hay jugadas del juego perdido para retomarlo. Si esto tampoco es posible, lo vuelve a ejecutar desde el comienzo.
+    \end{enumerate}
+    
+    Si cae el servidor líder se realizarán las funciones 1 y 3 del aspecto anterior además de:
+    \begin{enumerate}
+    	\item Retomar la réplica de los torneos que este estaba ejecutando, lo cual se resuelve con lo explicado en el apartado de Réplicas en Torneos.
+    \end{enumerate}
+    
+    Cuando un cliente falla, el sistema sigue ejecutando su torneo y lo deja guardado por un tiempo predefinido para en caso de que el cliente vuelva a entrar, en caso que lo desee este pueda seguir viendo el torneo desde donde se quedó, volver a verlo desde el comienzo o ejecutar uno nuevo.
     
     \section{An\'alisis de las caracter\'isticas de la implementaci\'on}
     
