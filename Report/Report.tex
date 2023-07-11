@@ -47,7 +47,7 @@
     Es una Tabla Hash Distribuida utilizada para la implementación de redes peer-to peer estructuradas. Chord especifica la información que cada nodo de la red debe almacenar, referente a otros nodos, así como, la información referente a los ficheros que es compartida entre nodos. Además, regula la comunicación y el intercambio de mensajes entre estos.\\
     
     \subsection{Asignaci\'on de IDs a los nodos}
-    Los nodos y los ID de los ficheros compartidos tienen asociado un identificador binario de m bits. El valor de m es un parámetro configurable en la creación de la instancia de los servidores en server.py. La asignación se realiza mediante la función hash SHA-1. Los identificadores de los nodos se representan en un anillo de identificadores módulo 2m. El rango de los valores de los identificadores de los nodos y claves oscila desde 0 hasta 2m - 1.\\
+    Los nodos y los ID de los ficheros compartidos tienen asociado un identificador binario de m bits. El valor de m es un parámetro configurable en la creación de la instancia de los servidores en server.py. La asignación se realiza mediante la función hash SHA-1. Los identificadores de los nodos se representan en un anillo de identificadores módulo $2^m$. El rango de los valores de los identificadores de los nodos y claves oscila desde 0 hasta $2^m-1$.\\
     
     \subsection{Lista de sucesores y predecesores}
     Para aumentar la robustez de la Tabla Hash Distribuida, cada nodo mantiene una lista de sucesores y predecesores de tamaño k donde k$\leq$n y n es la cantidad total de nodos de la red. En este proyecto el valor tomado de k es k=n. Más adelante serán explicadas las ventajas y desventajas de tomar esta decisión.\\
